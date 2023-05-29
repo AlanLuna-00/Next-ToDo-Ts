@@ -46,7 +46,7 @@ const CreateTaskModal = ({ isOpen, onClose }: CreateTaskModalProps) => {
   return (
     <>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} id="tasks">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create Task</ModalHeader>

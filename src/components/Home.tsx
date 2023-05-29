@@ -2,6 +2,7 @@
 import React from "react";
 import { Button, Container } from "@chakra-ui/react";
 import CreateTaskModal from "@/components/CreateTaskModal";
+import ShowTodos from './ShowTodo';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -15,10 +16,11 @@ const Home = () => {
   };
 
   return (
-    <Container maxW="md">
+    <Container maxW="md" id="tasks">
       <Button onClick={handleOpenModal}>Create Task
         <CreateTaskModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </Button>
+        <ShowTodos />
     </Container>
   );
 };
