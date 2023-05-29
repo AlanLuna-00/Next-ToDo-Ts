@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -8,13 +8,14 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Button,
   FormControl,
   FormLabel,
   Input,
   Select,
-  Textarea, 
+  Button,
 } from "@chakra-ui/react";
+import { Task } from "@/redux/taskReducer";
+import { v4 as uuidv4 } from "uuid";
 import useCreateTask from "@/hooks/useCreateTask";
 
 interface CreateTaskModalProps {
@@ -22,30 +23,56 @@ interface CreateTaskModalProps {
   onClose: () => void;
 }
 
-const CreateTaskModal = ({ isOpen, onClose }: CreateTaskModalProps) => {
+const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const { onOpen } = useDisclosure();
-  const {
-    title,
-    text,
-    priority,
-    day,
-    hour,
-    handleTitleChange,
-    handleTextChange,
-    handlePriorityChange,
-    handleDayChange,
-    handleHourChange,
-    createTask,
-  } = useCreateTask();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("");
+  const [day, setDay] = useState("");
+  const [hour, setHour] = useState("");
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value);
+  };
+
+  const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPriority(e.target.value);
+  };
+
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDay(e.target.value);
+  };
+
+  const handleHourChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setHour(e.target.value);
+  };
+
+  const { createTask } = useCreateTask();
 
   const handleSubmit = () => {
-    createTask();
+    const newTask: Task = {
+      id: uuidv4(),
+      status: false,
+      title,
+      description,
+      priority,
+      day,
+      hour,
+    };
+    createTask(newTask);
+    console.log(newTask);
     onClose();
   };
 
   return (
     <>
-
       <Modal isOpen={isOpen} onClose={onClose} id="tasks">
         <ModalOverlay />
         <ModalContent>
@@ -58,73 +85,75 @@ const CreateTaskModal = ({ isOpen, onClose }: CreateTaskModalProps) => {
                 placeholder="Title"
                 value={title}
                 onChange={handleTitleChange}
-/>
-</FormControl>
-<FormControl>
-<FormLabel>Description</FormLabel>
-<Textarea
-             placeholder="Description"
-             value={text}
-             onChange={handleTextChange}
-           />
-</FormControl>
-<FormControl>
-<FormLabel>Priority</FormLabel>
-<Select
-             placeholder="Select Priority"
-             value={priority}
-             onChange={handlePriorityChange}
-           >
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-</Select>
-</FormControl>
-<FormControl>
-<FormLabel>Day</FormLabel>
-<Select
-             placeholder="Select Day"
-             value={day}
-             onChange={handleDayChange}
-           >
-<option value="Monday">Monday</option>
-<option value="Tuesday">Tuesday</option>
-<option value="Wednesday">Wednesday</option>
-<option value="Thursday">Thursday</option>
-<option value="Friday">Friday</option>
-<option value="Saturday">Saturday</option>
-<option value="Sunday">Sunday</option>
-</Select>
-</FormControl>
-<FormControl>
-<FormLabel>Hour</FormLabel>
-<Select
-             placeholder="Select Hour"
-             value={hour}
-             onChange={handleHourChange}
-           >
-<option value="08:00">08:00</option>
-<option value="09:00">09:00</option>
-<option value="10:00">10:00</option>
-<option value="11:00">11:00</option>
-<option value="12:00">12:00</option>
-<option value="13:00">13:00</option>
-<option value="14:00">14:00</option>
-</Select>
-</FormControl>
-</ModalBody>
-<ModalFooter>
-<Button colorScheme="blue" mr={3} onClick={handleSubmit}>
-Create
-</Button>
-<Button variant="ghost" onClick={onClose}>
-Cancel
-</Button>
-</ModalFooter>
-</ModalContent>
-</Modal>
-</>
-);
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Input
+                placeholder="Description"
+                value={description}
+                onChange={handleDescriptionChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Priority</FormLabel>
+              <Select
+                placeholder="Select Priority"
+                value={priority}
+                onChange={handlePriorityChange}
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Day</FormLabel>
+              <Select
+                placeholder="Select Day"
+                value={day}
+                onChange={handleDayChange}
+              >
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Hour</FormLabel>
+              <Select
+                placeholder="Select Hour"
+                value={hour}
+                onChange={handleHourChange}
+              >
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+              </Select>
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleSubmit}
+              disabled={!title || !description || !priority || !day || !hour}
+            >
+              Create
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
 };
 
 export default CreateTaskModal;
