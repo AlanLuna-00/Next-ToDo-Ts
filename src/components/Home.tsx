@@ -16,8 +16,9 @@ const Home = () => {
 
   return (
     <Container maxW="md">
-      <Button onClick={handleOpenModal}>Create Task</Button>
-      <CreateTaskModal isOpen={isModalOpen} onClose={handleCloseModal} day="Monday" />
+      <Button onClick={handleOpenModal}>Create Task
+        <CreateTaskModal isOpen={isModalOpen} onClose={handleCloseModal} />
+        </Button>
     </Container>
   );
 };

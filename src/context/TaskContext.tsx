@@ -1,53 +1,43 @@
-"use client"
-import React, { useState, useEffect, createContext, ReactNode, Dispatch, SetStateAction } from 'react';
+import React, { createContext, ReactNode, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-export const Context = createContext<[Task, Dispatch<SetStateAction<Task>>] | undefined>(undefined);
-
-export type Task = {
-  [day: string]: {
-    title: string;
-    text: string;
-    priority: "1" | "2" | "3";
-  }[];
-};
+export interface Task {
+  id: string;
+  title: string;
+  text: string;
+  priority: "1" | "2" | "3";
+  day: string;
+  hour: string;
+}
 
 interface TaskContextProps {
   children: ReactNode;
 }
 
+interface TaskContextValue {
+  tasks: Task[];
+  setTasks: Dispatch<SetStateAction<Task[]>>;
+}
+
+export const Context = createContext<TaskContextValue | undefined>(undefined);
+
 const TaskContext = ({ children }: TaskContextProps) => {
-  const [tasks, setTasks] = useState<Task>(() => {
-    const storedTasks = typeof window !== 'undefined' ? localStorage.getItem('tasks') : null;
-    try {
-      return storedTasks ? JSON.parse(storedTasks) : {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-        Sunday: [],
-      };
-    } catch (error) {
-      console.error('Error parsing stored tasks:', error);
-      return {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-        Sunday: [],
-      };
-    }
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const storedTasks = localStorage.getItem('tasks');
+    return storedTasks ? JSON.parse(storedTasks) : [];
   });
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
+  const contextValue: TaskContextValue = {
+    tasks,
+    setTasks,
+  };
+
   return (
-    <Context.Provider value={[tasks, setTasks]}>
+    <Context.Provider value={contextValue}>
       {children}
     </Context.Provider>
   );
