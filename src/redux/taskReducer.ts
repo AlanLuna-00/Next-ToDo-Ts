@@ -20,15 +20,19 @@ const initialState: TaskState = {
 };
 
 const loadTasksFromLocalStorage = (): Task[] => {
-  const tasksJson = localStorage.getItem("tasks");
-  if (tasksJson) {
-    return JSON.parse(tasksJson);
+  if (typeof window !== "undefined") {
+    const tasksJson = localStorage.getItem("tasks");
+    if (tasksJson) {
+      return JSON.parse(tasksJson);
+    }
   }
   return [];
 };
 
 const saveTasksToLocalStorage = (tasks: Task[]) => {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  if (typeof window !== "undefined") {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
 };
 
 const taskSlice = createSlice({
