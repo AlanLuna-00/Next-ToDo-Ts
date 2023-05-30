@@ -27,11 +27,8 @@ body {
 }
 
 section {
-  background-image: url("../../public/tasks.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-color: #070517 !important;
+
   height: 95vh;
   width: 100vw;
 }

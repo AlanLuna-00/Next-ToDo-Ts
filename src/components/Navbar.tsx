@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
+import { FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -14,7 +17,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-white">Logo</h1>
+              <h1 className="text-white">Todo's App</h1>
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -22,25 +25,20 @@ const Navbar = () => {
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Inicio
+                  by Alan Luna
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/in/alan-luna-304655214/"
+                  target="_blank"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Acerca
+                  <FaLinkedin size={35} className="m-0" />
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com/AlanLuna-00"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
-                  Servicios
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Contacto
+                  <FaGithub size={35} />
                 </a>
               </div>
             </div>

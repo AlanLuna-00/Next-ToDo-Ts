@@ -19,13 +19,28 @@ const initialState: TaskState = {
   tasks: [],
 };
 
+const loadTasksFromLocalStorage = (): Task[] => {
+  const tasksJson = localStorage.getItem("tasks");
+  if (tasksJson) {
+    return JSON.parse(tasksJson);
+  }
+  return [];
+};
+
+const saveTasksToLocalStorage = (tasks: Task[]) => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
 const taskSlice = createSlice({
   name: "task",
-  initialState,
+  initialState: {
+    tasks: loadTasksFromLocalStorage(),
+  } as TaskState,
   reducers: {
     addTask: {
       reducer: (state, action: PayloadAction<Task>) => {
         state.tasks.push(action.payload);
+        saveTasksToLocalStorage(state.tasks);
       },
       prepare: (task: Omit<Task, "id">) => {
         return {
@@ -38,6 +53,7 @@ const taskSlice = createSlice({
     },
     deleteTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      saveTasksToLocalStorage(state.tasks);
     },
     updateTask: (
       state,
@@ -47,11 +63,24 @@ const taskSlice = createSlice({
       const taskIndex = state.tasks.findIndex((task) => task.id === taskId);
       if (taskIndex !== -1) {
         state.tasks[taskIndex] = { ...state.tasks[taskIndex], ...updatedTask };
+        saveTasksToLocalStorage(state.tasks);
+      }
+    },
+    changeStatus: (
+      state,
+      action: PayloadAction<{ taskId: string; status: boolean }>
+    ) => {
+      const { taskId, status } = action.payload;
+      const taskIndex = state.tasks.findIndex((task) => task.id === taskId);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex].status = status;
+        saveTasksToLocalStorage(state.tasks);
       }
     },
   },
 });
 
-export const { addTask, deleteTask, updateTask } = taskSlice.actions;
+export const { addTask, deleteTask, updateTask, changeStatus } =
+  taskSlice.actions;
 
 export default taskSlice.reducer;

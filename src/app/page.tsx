@@ -6,6 +6,7 @@ import store, { RootState } from "../redux/store";
 import Home from "@/components/Home";
 import Navbar from "../components/Navbar";
 import Landing from "@/components/Landing";
+import { Toaster } from "react-hot-toast";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
           <Navbar />
           <Landing />
           <Home />
+          <Toaster />
         </ChakraProvider>
       </Provider>
     </div>
