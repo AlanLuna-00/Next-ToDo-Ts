@@ -23,6 +23,7 @@ import { Box, Heading, Text, IconButton } from "@chakra-ui/react";
 import { FiEdit } from "react-icons/fi";
 import useEditTask from "@/hooks/useEditTask";
 import validateForm from "@/utils/validationForm";
+import { toast } from "react-hot-toast";
 
 interface ShowTasksProps {
   selectedDay: string;
@@ -36,6 +37,7 @@ const ShowTasks: React.FC<ShowTasksProps> = ({ selectedDay }) => {
 
   const handleDelete = (taskId: string) => {
     dispatch(deleteTask(taskId));
+    toast.error("Task deleted");
   };
 
   const handleChangeStatus = (taskId: string, status: boolean) => {
